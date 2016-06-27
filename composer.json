@@ -1,11 +1,20 @@
 {
-    "require": {
-        "illuminate/http": "^5.2",
-        "illuminate/support": "^5.2"
-    },
-    "autoload": {
-        "psr-4": {
-            "Arkitecht\\SlackBot\\": "src/Arkitecht/SlackBot"
-        }
+  "name": "arkitecht/slackbot",
+  "description": "PHP Bot for Slack",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Aaron Rubin",
+      "email": "aaron@arkitech.net"
     }
+  ],
+  "require": {
+    "illuminate/http": "^5.2",
+    "illuminate/support": "^5.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Arkitecht\\SlackBot\\": "src/Arkitecht/SlackBot"
+    }
+  }
 }
