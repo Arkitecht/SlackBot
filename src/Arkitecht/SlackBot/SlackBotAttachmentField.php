@@ -15,6 +15,11 @@ class SlackBotAttachmentField
         $this->short = $short;
     }
 
+    public function asJson()
+    {
+        return $this;
+    }
+
     public function __toJson()
     {
         return json_encode($this);
