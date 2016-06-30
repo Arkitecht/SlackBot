@@ -13,9 +13,9 @@ trait Queryable
 
     }
 
-    public function collection($query, $bindings = [])
+    public function collection($query, $bindings = [], $format = PDO::FETCH_NUM)
     {
-        $results = $this->fetchAll($query, $bindings);
+        $results = $this->fetchAll($query, $bindings, $format);
         if ($results) return collect($results);
 
         return collect();
@@ -31,7 +31,7 @@ trait Queryable
 
         $collect = collect($this->fetchAll($query, $bindings, PDO::FETCH_ASSOC));
 
-        return call_user_func_array([$collect, 'lists'], $keys);
+        return call_user_func_array([$collect, 'pluck'], $keys);
     }
 
     public function fetchAll($query, $bindings = [], $format = PDO::FETCH_NUM)
