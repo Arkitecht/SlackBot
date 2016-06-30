@@ -14,12 +14,12 @@ class SlackBotAttachment
         'title',
         'title_link',
         'text',
-        'fields',
         'image_url',
         'thumb_url',
         'footer',
         'footer_icon',
-        'ts'
+        'ts',
+        'mrkdwn_in'
     ];
     private $attachment = [];
 
@@ -28,10 +28,34 @@ class SlackBotAttachment
         $this->fallback = $fallback;
     }
 
+    public function setData($data)
+    {
+        foreach ($data as $key => $val)
+            $this->$key = $val;
+    }
+
+    public function addField($fieldOrTitle,$value='',$short=false)
+    {
+        if (is_a($fieldOrTitle,'\Arkitecht\SlackBot\SlackBotAttachmentField'))
+            $this->_addField($fieldOrTitle);
+        else {
+            if ( !$value ) throw new \Exception("You must provide a value for SlackBotAttachmentField");
+            $this->_addField(new SlackBotAttachmentField($fieldOrTitle,$value,$short));
+        }
+    }
+
+    private function _addField(SlackBotAttachmentField $field)
+    {
+        if (!array_key_exists('_fields', $this->attachment))
+            $this->attachment['_fields'] = [];
+        $this->attachment['_fields'][] = $field;
+    }
+
+
     public function setTimestamp($ts = '')
     {
         if (!$ts) $ts = time();
-        $this->timestamp = $ts;
+        $this->ts = $ts;
     }
 
     public function __get($name)
@@ -50,5 +74,22 @@ class SlackBotAttachment
         $this->attachment[$name] = $value;
     }
 
+    public function asJson()
+    {
+        $data = $this->attachment;
 
+        if (array_key_exists('_fields', $data)) {
+            $data['fields'] = [];
+            foreach ($data['_fields'] as $field)
+                $data['fields'][] = $field->asJson();
+            unset($data['_fields']);
+        }
+
+        return $data;
+    }
+
+    public function __toJson()
+    {
+        return json_encode($this->asJson());
+    }
 }
